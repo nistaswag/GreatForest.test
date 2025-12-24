@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forestrees - Minecraft Server</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/auth.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ffd700;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .server-banner {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 2px solid #ffd700;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .server-ip {
+            background-color: #1a1a1a;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            display: block;
+            margin: 20px auto 40px;
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            font-size: 18px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .server-ip:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+        }
+
+        .description {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #d0d0d0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .features {
+            margin-top: 40px;
+        }
+
+        .features h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid #333;
+        }
+
+        .features li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #d0d0d0;
+        }
+
+        .features li:before {
+            content: "✓";
+            color: #ffd700;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .auth-modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #1a1a1a, #2a1a2a, #1a2a2a, #1a1a2a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .auth-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cGF0aCBkPSJNNTAgMTBjMC0xLjEuOS0yIDItMmgyYzEuMSAwIDIgLjkgMiAydjJjMCAxLjEtLjkgMi0yIDJoLTJjLTEuMSAwLTItLjktMi0ydi0yem0wIDM2YzAtMS4xLS45LTItMi0yaC0yYy0xLjEgMC0yIC45LTIgMnYyYzAgMS4xLjkgMiAyIDJoMmMxLjEgMCAyLS45IDItMnYtMnpNMTAgNTRjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmgydjJjMCAxLjEuOSAyIDIgMmgyYzEuMSAwIDItLjkgMi0ydi0yYzAtMS4xLS45LTItMi0yaC0ydi0yaC0yem0zNi0zNmMwLTEuMS0uOS0yLTItMmgtMmMtMS4xIDAtMiAuOS0yIDJ2MmMwIDEuMS45IDIgMiAyaDJjMS4xIDAgMi0uOSAyLTJ2LTJ6TTEwIDEwYzAtMS4xLS45LTItMi0ySDZjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmgydjJoLTJjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmgydjJoLTJjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmgydjJoLTJjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmg2YzEuMSAwIDItLjkgMi0ydi0yYzAtMS4xLS45LTItMi0yaC0ydi0yaDJjMS4xIDAgMi0uOSAyLTJ2LTJjMC0xLjEtLjktMi0yLTJoLTJ2LTJ6bTMwIDBjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmgydjJoLTJjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmgydjJoLTJjLTEuMSAwLTIgLjktMiAydjJjMCAxLjEuOSAyIDIgMmg2YzEuMSAwIDItLjkgMi0ydi0yYzAtMS4xLS45LTItMi0yaC0ydi0yaDJjMS4xIDAgMi0uOSAyLTJ2LTJjMC0xLjEtLjktMi0yLTJoLTJ2LTJoLTJ6IiBmaWxsPSJmZmQ3MDAiIG9wYWNpdHk9IjAuMSIvPjwvc3ZnPg==');
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .auth-content {
+            background: rgba(26, 26, 26, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .auth-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ffb700, #ffd700);
+            background-size: 200% 100%;
+            animation: gradientBG 3s ease infinite;
+        }
+
+        .auth-btn {
+            padding: 10px 24px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .auth-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(45deg, #ffb700, #ffd700);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-outline {
+            border: 1px solid #ffd700;
+            color: #ffd700;
+        }
+
+        .auth-btn.register {
+            background: linear-gradient(45deg, #ffd700, #ffb700);
+            color: #000;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .auth-btn.register:hover {
+            background: linear-gradient(45deg, #ffb700, #ffd700);
+            box-shadow: 0 7px 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .notification {
+            border-left: 4px solid #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .server-banner {
+                height: 200px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="bg-elements">
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+        <div class="bg-element"></div>
+    </div>
+
+    <header class="header">
+        <a href="../" class="back-link">
+            <span>←</span> Назад к продуктам
+        </a>
+        <a href="../" class="logo">FORESTREES</a>
+
+        <div class="auth-buttons">
+            <button class="auth-btn" id="loginBtn">Вход</button>
+            <button class="auth-btn register" id="registerBtn">Регистрация</button>
+            <div class="user-menu" id="userMenu" style="display: none;">
+                <span class="username" id="usernameDisplay"></span>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-item" id="profileLink">Профиль</a>
+                    <a href="#" class="dropdown-item" id="logoutBtn">Выйти</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth Modals -->
+    <div class="auth-modal" id="loginModal">
+        <div class="auth-content">
+            <span class="close">&times;</span>
+            <h2>Вход в аккаунт</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="text" id="loginUsername" required>
+                    <label for="loginUsername">Имя пользователя</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" required>
+                    <label for="loginPassword">Пароль</label>
+                </div>
+                <button type="submit" class="submit-btn">Войти</button>
+                <p class="auth-switch">Нет аккаунта? <a href="#" id="showRegister">Зарегистрироваться</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="auth-modal" id="registerModal">
+        <div class="auth-content">
+            <span class="close">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <input type="text" id="regUsername" required>
+                    <label for="regUsername">Имя пользователя</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="regEmail" required>
+                    <label for="regEmail">Email</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPassword" required>
+                    <label for="regPassword">Пароль</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regConfirmPassword" required>
+                    <label for="regConfirmPassword">Подтвердите пароль</label>
+                </div>
+                <button type="submit" class="submit-btn">Зарегистрироваться</button>
+                <p class="auth-switch">Уже есть аккаунт? <a href="#" id="showLogin">Войти</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <img src="../images/Forestrees logo.png" alt="Forestrees Server" class="server-banner">
+        
+        <h1>Forestrees</h1>
+        <div class="server-ip">play.forestrees.com</div>
+        
+        <div class="description">
+            <p>Добро пожаловать на <span style="color: #ffd700; font-weight: 500;">Forestrees</span> — сервер выживания с атмосферой ванильного Minecraft. Мы создали уютное сообщество, где каждый игрок может найти что-то по душе.</p>
+            <p>Наш сервер предлагает уникальный игровой опыт с кастомными ивентами, экономикой и дружелюбным комьюнити. Присоединяйся к нам и стань частью нашего растущего сообщества!</p>
+        </div>
+        
+        <div class="features">
+            <h2>Особенности сервера:</h2>
+            <ul>
+                <li>Выживание с элементами ванильного майнкрафта</li>
+                <li>Уникальные ивенты и соревнования</li>
+                <li>Дружелюбное сообщество</li>
+                <li>Стабильный аптайм и защита от гриферства</li>
+                <li>Регулярные обновления и новые фичи</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-container">
+            <button class="close-auth" data-close-auth>&times;</button>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-form="login">Вход</div>
+                <div class="auth-tab" data-form="register">Регистрация</div>
+            </div>
+
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn">Войти</button>
+                <p class="text-center mt-3">
+                    Нет аккаунта? 
+                    <a href="#" onclick="authUI.showAuthForm('register'); return false;">Зарегистрироваться</a>
+                </p>
+            </form>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerUsername">Имя пользователя</label>
+                    <input type="text" id="registerUsername" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Пароль</label>
+
+            @media (max-width: 768px) {
+                .header {
+                    padding: 15px 20px;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                
+                .server-banner {
+                    height: 200px;
+                }
+                
+                h1 {
+                    font-size: 28px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header class="header">
+            <a href="../index.html" class="logo">FORESTREES</a>
+            
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link">Главная</a>
+                <a href="#" class="nav-link">Forest Client</a>
+                <a href="#" class="nav-link">Forest RM</a>
+                <div class="auth-links" style="display: flex; gap: 15px; margin-left: 20px;">
+                    <a href="#" class="nav-link" style="background: #ffd700; color: #000; padding: 8px 16px; border-radius: 4px; font-weight: 500;">Регистрация</a>
+                    <a href="#" class="nav-link" style="border: 1px solid #ffd700; color: #ffd700; padding: 8px 16px; border-radius: 4px; font-weight: 500;">Вход</a>
+                    <a href="profile.html" class="nav-link" style="color: #ffd700; display: flex; align-items: center; gap: 5px;">
+                        <span>Профиль</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    <button class="btn btn-outline" data-auth-toggle>Войти</button>
+                </div>
+                <div class="user-menu" data-user-links style="display: none;">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <div class="user-name" style="padding: 10px 15px; font-weight: 600;"></div>
+                        </div>
+                        <div class="divider"></div>
+                        <a href="#" class="dropdown-item">Профиль</a>
+                        <a href="#" class="dropdown-item">Настройки</a>
+                        <div class="divider"></div>
+                        <a href="#" class="dropdown-item" data-logout>Выйти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <img src="../images/Forestrees logo.png" alt="Forestrees Server" class="server-banner">
+        
+        <h1>Forestrees</h1>
+        <div class="server-ip">play.forestrees.com</div>
+        
+        <div class="description">
+            <p>Добро пожаловать на <span style="color: #ffd700; font-weight: 500;">Forestrees</span> — сервер выживания с атмосферой ванильного Minecraft. Мы создали уютное сообщество, где каждый игрок может найти что-то по душе.</p>
+            <p>Наш сервер предлагает уникальный игровой опыт с кастомными ивентами, экономикой и дружелюбным комьюнити. Присоединяйся к нам и стань частью нашего растущего сообщества!</p>
+        </div>
+        
+        <div class="features">
+            <h2>Особенности сервера:</h2>
+            <ul>
+                <li>Выживание с элементами ванильного майнкрафта</li>
+                <li>Уникальные ивенты и соревнования</li>
+                <li>Дружелюбное сообщество</li>
+                <li>Стабильный аптайм и защита от гриферства</li>
+                <li>Регулярные обновления и новые фичи</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="../js/auth.js"></script>
+    <script>
+        // Initialize auth system
+        document.addEventListener('DOMContentLoaded', () => {
+            window.authUI = new AuthUI();
+        });
+    </script>
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const closeBtns = document.querySelectorAll('.close');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const userMenu = document.getElementById('userMenu');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const profileLink = document.getElementById('profileLink');
+
+        // Check if user is logged in
+        function checkAuth() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                const userData = JSON.parse(user);
+                userMenu.style.display = 'flex';
+                usernameDisplay.textContent = userData.username;
+                loginBtn.style.display = 'none';
+                registerBtn.style.display = 'none';
+            } else {
+                userMenu.style.display = 'none';
+                loginBtn.style.display = 'block';
+                registerBtn.style.display = 'block';
+            }
+        }
+
+        // Show modal function
+        function showModal(modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Hide modal function
+        function hideModal(modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            // Clear forms and messages
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => form.reset());
+            
+            const messages = document.querySelectorAll('.success-message, .error-message');
+            messages.forEach(msg => msg.style.display = 'none');
+        }
+
+        // Event Listeners
+        loginBtn.addEventListener('click', () => showModal(loginModal));
+        registerBtn.addEventListener('click', () => showModal(registerModal));
+        showRegister?.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideModal(loginModal);
+            showModal(registerModal);
+        });
+        showLogin?.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideModal(registerModal);
+            showModal(loginModal);
+        });
+
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modal = btn.closest('.auth-modal');
+                hideModal(modal);
+            });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('auth-modal')) {
+                hideModal(e.target);
+            }
+        });
+
+        // Login Form Submission
+        loginForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple validation
+            if (!username || !password) {
+                showError(loginModal, 'Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            // In a real app, you would make an API call here
+            // This is just a simulation
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                // Save user data to localStorage
+                localStorage.setItem('user', JSON.stringify({
+                    username: user.username,
+                    email: user.email
+                }));
+                
+                // Show success message
+                showSuccess(loginModal, 'Успешный вход!');
+                
+                // Update UI
+                setTimeout(() => {
+                    hideModal(loginModal);
+                    checkAuth();
+                }, 1500);
+            } else {
+                showError(loginModal, 'Неверное имя пользователя или пароль');
+            }
+        });
+
+        // Register Form Submission
+        registerForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            // Validation
+            if (!username || !email || !password || !confirmPassword) {
+                showError(registerModal, 'Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showError(registerModal, 'Пароли не совпадают');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError(registerModal, 'Пароль должен содержать не менее 6 символов');
+                return;
+            }
+            
+            // Check if user already exists
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userExists = users.some(user => user.username === username || user.email === email);
+            
+            if (userExists) {
+                showError(registerModal, 'Пользователь с таким именем или email уже существует');
+                return;
+            }
+            
+            // Add new user (in a real app, this would be an API call)
+            users.push({
+                username,
+                email,
+                password // In a real app, you should hash the password
+            });
+            
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Auto-login the new user
+            localStorage.setItem('user', JSON.stringify({
+                username,
+                email
+            }));
+            
+            // Show success message
+            showSuccess(registerModal, 'Регистрация прошла успешно!');
+            
+            // Update UI
+            setTimeout(() => {
+                hideModal(registerModal);
+                checkAuth();
+            }, 1500);
+        });
+
+        // Logout
+        logoutBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            checkAuth();
+        });
+
+        // Profile link
+        profileLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Страница профиля будет доступна в следующем обновлении!');
+        });
+
+        // Helper functions
+        function showError(modal, message) {
+            let errorDiv = modal.querySelector('.error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                modal.querySelector('form').prepend(errorDiv);
+            }
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Hide success message if visible
+            const successDiv = modal.querySelector('.success-message');
+            if (successDiv) successDiv.style.display = 'none';
+        }
+
+        function showSuccess(modal, message) {
+            let successDiv = modal.querySelector('.success-message');
+            if (!successDiv) {
+                successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                modal.querySelector('form').prepend(successDiv);
+            }
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            // Hide error message if visible
+            const errorDiv = modal.querySelector('.error-message');
+            if (errorDiv) errorDiv.style.display = 'none';
+        }
+
+        // Check auth status on page load
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
+</body>
+</html>

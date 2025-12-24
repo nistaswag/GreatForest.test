@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Forest Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #0a0a0a;
+            color: #fff;
+        }
+        .profile-container {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            margin-top: 50px;
+            border: 1px solid #2e7d32;
+        }
+        .error-message {
+            color: #ff5252;
+            background-color: #2a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #ff5252;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #4caf50;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 15px;
+            font-weight: bold;
+        }
+        .profile-info {
+            margin-top: 20px;
+        }
+        .info-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #4caf50;
+            margin-bottom: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background-color: #3d8b40;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #4caf50;
+            color: #4caf50;
+            margin-left: 10px;
+        }
+        .btn-outline:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container" id="profileContent">
+        <!-- Content will be loaded by JavaScript -->
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const profileContent = document.getElementById('profileContent');
+
+        if (!isAuthenticated) {
+            profileContent.innerHTML = `
+                <div class="error-message">
+                    <h2>Ошибка доступа</h2>
+                    <p>Вы не авторизованы. Пожалуйста, войдите или зарегистрируйтесь.</p>
+                    <a href="index.html#login" class="btn">Войти</a>
+                    <a href="index.html#register" class="btn btn-outline">Регистрация</a>
+                </div>
+            `;
+        } else {
+            const firstLetter = userData.username ? userData.username.charAt(0).toUpperCase() : 'U';
+            const joinDate = userData.joinDate ? new Date(userData.joinDate).toLocaleDateString() : 'Неизвестно';
+            
+            profileContent.innerHTML = `
+                <div class="profile-header">
+                    <div class="profile-avatar">${firstLetter}</div>
+                    <h1>${userData.username || 'Пользователь'}</h1>
+                    <p>${userData.email || ''}</p>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="info-item">
+                        <div class="info-label">Имя пользователя</div>
+                        <div>${userData.username || 'Не указано'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div>${userData.email || 'Не указан'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Дата регистрации</div>
+                        <div>${joinDate}</div>
+                    </div>
+                </div>
+                
+                <button class="btn" id="logoutBtn">Выйти</button>
+            `;
+
+            // Add logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('userData');
+                window.location.href = 'index.html';
+            });
+        }
+    });
+    </script>
+</body>
+</html>

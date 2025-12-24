@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest - Лучший клиент</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .featured-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .featured-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 50px 40px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-normal);
+            border: 1px solid rgba(0, 230, 118, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .featured-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 230, 118, 0.15);
+        }
+        
+        .featured-title {
+            font-size: 2.8rem;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px var(--accent-glow);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .featured-title:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            background: var(--accent-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        
+        .featured-description {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .featured-badge {
+            display: inline-block;
+            background: var(--gradient-accent);
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0 10px 20px;
+            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
+            transition: var(--transition-normal);
+        }
+        
+        .featured-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 230, 118, 0.4);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-item {
+            background: rgba(18, 18, 18, 0.7);
+            padding: 30px 25px;
+            border-radius: var(--border-radius-md);
+            transition: var(--transition-normal);
+            border: 1px solid rgba(0, 230, 118, 0.05);
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 30, 30, 0.8);
+            box-shadow: 0 10px 25px rgba(0, 230, 118, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+        
+        .feature-title {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .feature-text {
+            color: var(--text-color-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        @media (max-width: 768px) {
+            .featured-section {
+                padding: 60px 15px;
+            }
+            
+            .featured-title {
+                font-size: 2.2rem;
+            }
+            
+            .featured-description {
+                font-size: 1.1rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Анимация фона */
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 230, 118, 0.05) 0%, transparent 60%);
+            z-index: 1;
+            animation: rotate 30s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <section class="featured-section">
+        <div class="featured-card">
+            <div class="featured-badge">Лучший выбор</div>
+            <h1 class="featured-title">Forest</h1>
+            <p class="featured-description">
+                Лучший клиент за свою цену с отличным функционалом. Forest предлагает непревзойденное 
+                сочетание производительности, надежности и удобства использования. 
+                Идеальное решение как для новичков, так и для опытных пользователей.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Молниеносная скорость</h3>
+                    <p class="feature-text">Оптимизированный код обеспечивает максимальную производительность даже на слабых устройствах.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Надежная защита</h3>
+                    <p class="feature-text">Передовые алгоритмы шифрования обеспечивают полную конфиденциальность ваших данных.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Современный дизайн</h3>
+                    <p class="feature-text">Интуитивно понятный интерфейс с поддержкой темной темы и настройкой под себя.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
